@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"fmt"
 	"ginblog/utils"
 	"ginblog/utils/errmsg"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
@@ -22,7 +23,7 @@ func UpLoadFile(file multipart.File, fileSize int64) (string, int) {
 	upToken := putPolicy.UploadToken(mac)
 
 	cfg := storage.Config{
-		Zone:          &storage.ZoneHuadong,
+		Zone:          &storage.ZoneHuanan,
 		UseCdnDomains: false,
 		UseHTTPS:      false,
 	}
@@ -33,6 +34,7 @@ func UpLoadFile(file multipart.File, fileSize int64) (string, int) {
 	ret := storage.PutRet{}
 
 	err := formUploader.PutWithoutKey(context.Background(), &ret, upToken, file, fileSize, &putExtra)
+	fmt.Println(err)
 	if err != nil {
 		return "", errmsg.ERROR
 	}

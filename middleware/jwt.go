@@ -44,7 +44,7 @@ func (j *JWT) ParserToken(tokenString string) (*MyClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &MyClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return j.JwtKey, nil
 	})
-	
+
 	if err != nil {
 		if ve, ok := err.(*jwt.ValidationError); ok {
 			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
@@ -59,14 +59,14 @@ func (j *JWT) ParserToken(tokenString string) (*MyClaims, error) {
 			}
 		}
 	}
-	
+
 	if token != nil {
 		if claims, ok := token.Claims.(*MyClaims); ok && token.Valid {
 			return claims, nil
 		}
 		return nil, TokenInvalid
 	}
-	
+
 	return nil, TokenInvalid
 }
 
@@ -84,7 +84,7 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		
+
 		checkToken := strings.Split(tokenHeader, " ")
 		if len(checkToken) == 0 {
 			code = errmsg.ERROR_TOKEN_TYPE_WRONG
@@ -95,7 +95,7 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		
+
 		if len(checkToken) != 2 || checkToken[0] != "Bearer" {
 			code = errmsg.ERROR_TOKEN_TYPE_WRONG
 			c.JSON(http.StatusOK, gin.H{
@@ -105,7 +105,7 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		
+
 		j := NewJWT()
 		// 解析token
 		claims, err := j.ParserToken(checkToken[1])
@@ -128,7 +128,7 @@ func JwtToken() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		
+
 		c.Set("username", claims)
 		c.Next()
 	}

@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func GetProfile(c *gin.Context)  {
+func GetProfile(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	data, code := model.GetProfile(id)
 	c.JSON(http.StatusOK, gin.H{
